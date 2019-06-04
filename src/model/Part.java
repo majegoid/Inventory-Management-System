@@ -9,19 +9,20 @@ package model;
  *
  * @author Drew
  */
-public abstract class Part
-{
+public abstract class Part {
+
     protected int id;
     protected String name;
     protected double price;
     protected int stock;
     protected int min;
     protected int max;
-    
+
     //constructors
-    public Part(){}
-    public Part(int id, String name, double price, int stock, int min, int max)
-    {
+    public Part() {
+    }
+
+    public Part(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -29,73 +30,59 @@ public abstract class Part
         this.min = min;
         this.max = max;
     }
-    
+
     //methods
     //setters (update)
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
-    
-    public void setName(String name)
-    {
+
+    public void setName(String name) {
         this.name = name;
     }
-    
-    public void setPrice(double price)
-    {
+
+    public void setPrice(double price) {
         this.price = price;
     }
-    
-    public void setStock(int stock)
-    {
+
+    public void setStock(int stock) {
         this.stock = stock;
     }
-    
-    public void setMin(int min)
-    {
+
+    public void setMin(int min) {
         this.min = min;
     }
-    
-    public void setMax(int max)
-    {
+
+    public void setMax(int max) {
         this.max = max;
     }
-    
-    public void setPrice(int price)
-    {
+
+    public void setPrice(int price) {
         this.price = price;
     }
-    
+
     //getters (read)
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
-    
-    public String getName()
-    {
+
+    public String getName() {
         return name;
     }
-    
-    public double getPrice()
-    {
+
+    public double getPrice() {
         return price;
     }
-    
-    public int getStock()
-    {
+
+    public int getStock() {
         return stock;
     }
-    
-    public int getMin()
-    {
+
+    public int getMin() {
         return min;
     }
-    
-    public int getMax()
-    {
+
+    public int getMax() {
         return max;
     }
 }
-    

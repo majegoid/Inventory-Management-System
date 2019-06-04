@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package model;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -11,8 +12,8 @@ import javafx.collections.ObservableList;
  *
  * @author Drew
  */
-public class Product
-{
+public class Product {
+
     private final ObservableList<Part> associatedParts = FXCollections.observableArrayList();
     private int id;
     private String name;
@@ -20,10 +21,9 @@ public class Product
     private int stock;
     private int min;
     private int max;
-    
+
     //constructor
-    public Product(int id, String name, double price, int stock, int min, int max)
-    {
+    public Product(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -31,88 +31,72 @@ public class Product
         this.min = min;
         this.max = max;
     }
-    
+
     //methods
     //setters
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
-    
-    public void setName(String name)
-    {
+
+    public void setName(String name) {
         this.name = name;
     }
-    
-    public void setPrice(double price)
-    {
+
+    public void setPrice(double price) {
         this.price = price;
     }
-    
-    public void setStock(int stock)
-    {
+
+    public void setStock(int stock) {
         this.stock = stock;
     }
-    
-    public void setMin(int min)
-    {
+
+    public void setMin(int min) {
         this.min = min;
     }
-    
-    public void setMax(int max)
-    {
+
+    public void setMax(int max) {
         this.max = max;
     }
-    
-    public void setPrice(int price)
-    {
+
+    public void setPrice(int price) {
         this.price = price;
     }
-    
+
     //getters
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
-    
-    public String getName()
-    {
+
+    public String getName() {
         return name;
     }
-    
-    public double getPrice()
-    {
+
+    public double getPrice() {
         return price;
     }
-    
-    public int getStock()
-    {
+
+    public int getStock() {
         return stock;
     }
-    
-    public int getMin()
-    {
+
+    public int getMin() {
         return min;
     }
-    
-    public int getMax()
-    {
+
+    public int getMax() {
         return max;
     }
-    
+
     //add,delete,getAll
-    public void addAssociatedPart(Part part)
-    {
+    public void addAssociatedPart(Part part) {
         associatedParts.add(part);
     }
-    
-    public void deleteAssociatedPart(Part part)
-    {
+
+    public void deleteAssociatedPart(Part part) {
         associatedParts.remove(part);
     }
-    
-    public ObservableList<Part> getAllAssociatedParts()
-    {
+
+    public ObservableList<Part> getAllAssociatedParts() {
         ObservableList<Part> defensiveCopy = FXCollections.observableArrayList(associatedParts);
         return defensiveCopy;
     }

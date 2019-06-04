@@ -32,10 +32,11 @@ import model.Product;
  * @author Drew
  */
 public class ProductModifyController implements Initializable {
+
     int selectedProductIndex;
     Product selectedProduct;
     ObservableList<Part> newProductParts = FXCollections.observableArrayList();
-    
+
     @FXML
     private TextField idTextField;
 
@@ -53,7 +54,7 @@ public class ProductModifyController implements Initializable {
 
     @FXML
     private TextField minTextField;
-    
+
     @FXML
     private Label errorLabel;
 
@@ -108,12 +109,9 @@ public class ProductModifyController implements Initializable {
     @FXML
     void addPartToProduct(ActionEvent event) {
         Part selectedPart = partTableView.getSelectionModel().getSelectedItem();
-        if(selectedPart != null)
-        {
-            for(Part part : newProductParts)
-            {
-                if (part.getId() == selectedPart.getId())
-                {
+        if (selectedPart != null) {
+            for (Part part : newProductParts) {
+                if (part.getId() == selectedPart.getId()) {
                     return;
                 }
             }
@@ -124,16 +122,11 @@ public class ProductModifyController implements Initializable {
 
     @FXML
     void cancelProduct(ActionEvent event) {
-        try 
-        {
+        try {
             switchScene(event, "/view/MainView.fxml", "Inventory Management System - Main Menu");
-        }
-        catch(IOException e)
-        {
+        } catch (IOException e) {
             System.out.println(e.getMessage());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -141,8 +134,7 @@ public class ProductModifyController implements Initializable {
     @FXML
     void deletePartFromProduct(ActionEvent event) {
         int selectedPartInProductIndex = productPartTableView.getSelectionModel().getSelectedIndex();
-        if (selectedPartInProductIndex >= 0 && newProductParts.size() > 0)
-        {
+        if (selectedPartInProductIndex >= 0 && newProductParts.size() > 0) {
             newProductParts.remove(selectedPartInProductIndex);
             productPartTableView.setItems(newProductParts);
         }
@@ -151,8 +143,7 @@ public class ProductModifyController implements Initializable {
     @FXML
     void saveProduct(ActionEvent event) {
         boolean switchScene = false;
-        try
-        {
+        try {
             //Catch any format exception first
             Integer id = selectedProduct.getId();
             String name = nameTextField.getText();
@@ -162,45 +153,32 @@ public class ProductModifyController implements Initializable {
             Double price = Double.parseDouble(priceTextField.getText());
             //Validate correctly formatted fields
             String errorMessage = validateProductTextFields(price, stock, max, min);
-            if(errorMessage != null && errorMessage.isEmpty() == false)
-            {
+            if (errorMessage != null && errorMessage.isEmpty() == false) {
                 errorLabel.setText(errorMessage);
-            }
-            else
-            {
+            } else {
                 Product newProduct = new Product(id, name, price, stock, min, max);
-                for(Part part : newProductParts)
-                {
-                    if (part != null)
-                    {
+                for (Part part : newProductParts) {
+                    if (part != null) {
                         newProduct.addAssociatedPart(part);
                     }
                 }
                 Inventory.updateProduct(selectedProductIndex, newProduct);
                 switchScene = true;
             }
-            
-            if(switchScene)
-            {
+
+            if (switchScene) {
                 //Switch scene.
-                try 
-                {
+                try {
                     switchScene(event, "/view/MainView.fxml", "Inventory Management System - Main Menu");
-                }
-                catch(IOException e)
-                {
+                } catch (IOException e) {
                     System.out.println("controller.PartAddController.savePart() switchScene catch(IOException e)");
                     System.out.println(e.toString());
-                }
-                catch(Exception e)
-                {
+                } catch (Exception e) {
                     System.out.println("controller.PartAddController.savePart() switchScene catch(Exception e)");
                     System.out.println(e.toString());
                 }
             }
-        }
-        catch(NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             System.out.println("controller.ProductAddController.saveProduct() outer catch(NumberFormatException e)");
             System.out.println(e.toString());
             String errorMessage = "One or more fields are invalid or empty.";
@@ -212,45 +190,45 @@ public class ProductModifyController implements Initializable {
     void searchParts(ActionEvent event) {
         ObservableList<Part> searchResults = FXCollections.observableArrayList();
         String searchString = searchTextField.getText().toLowerCase();
-        for(Part part : Inventory.getAllParts())
-        {
-            if(part.getName().toLowerCase().contains(searchString))
-            {
+        for (Part part : Inventory.getAllParts()) {
+            if (part.getName().toLowerCase().contains(searchString)) {
                 searchResults.add(part);
             }
         }
         partTableView.setItems(searchResults);
     }
-    
-    public void switchScene(ActionEvent event, String url, String windowTitle) throws IOException
-    {
+
+    public void switchScene(ActionEvent event, String url, String windowTitle) throws IOException {
         Stage stage;
         Parent root;
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         root = FXMLLoader.load(getClass().getResource(url));
         stage.setScene(new Scene(root));
         stage.setTitle(windowTitle);
         stage.show();
     }
-    
-    public String validateProductTextFields(Double price, Integer stock, Integer max, Integer min)
-    {
+
+    public String validateProductTextFields(Double price, Integer stock, Integer max, Integer min) {
         StringBuilder errorMessageBuilder = new StringBuilder();
-        if (max <= 0)
+        if (max <= 0) {
             errorMessageBuilder.append("\"Max\" must be a positive whole number.\n");
-        if (min < 0)
+        }
+        if (min < 0) {
             errorMessageBuilder.append("\"Min\" must be a positive whole number or zero.\n");
-        if(min > stock)
+        }
+        if (min > stock) {
             errorMessageBuilder.append("\"Stock\" must be greater than or equal to \"Min\".\n");
-        if(max < stock)
+        }
+        if (max < stock) {
             errorMessageBuilder.append("\"Stock\" must be less than or equal to \"Max\".\n");
-        if (price < 0)
+        }
+        if (price < 0) {
             errorMessageBuilder.append("\"Price\" must be greater than or equal to $0.00.\n");
+        }
         return errorMessageBuilder.toString();
     }
-    
-    public void receiveSelectedProduct(int productIndex, Product product)
-    {
+
+    public void receiveSelectedProduct(int productIndex, Product product) {
         selectedProductIndex = productIndex;
         selectedProduct = product;
         idTextField.setText(String.valueOf(product.getId()));
@@ -259,13 +237,12 @@ public class ProductModifyController implements Initializable {
         priceTextField.setText(String.valueOf(product.getPrice()));
         minTextField.setText(String.valueOf(product.getMin()));
         maxTextField.setText(String.valueOf(product.getMax()));
-        for(Part part : selectedProduct.getAllAssociatedParts())
-        {
+        for (Part part : selectedProduct.getAllAssociatedParts()) {
             newProductParts.add(part);
         }
         productPartTableView.setItems(newProductParts);
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         partTableView.setItems(Inventory.getAllParts());
@@ -273,7 +250,7 @@ public class ProductModifyController implements Initializable {
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         partStockCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        
+
         ObservableList<Part> tempEmptyList = FXCollections.observableArrayList();
         productPartTableView.setItems(tempEmptyList);
         productPartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));

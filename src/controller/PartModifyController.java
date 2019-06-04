@@ -30,10 +30,10 @@ import model.Part;
  * @author Drew
  */
 public class PartModifyController implements Initializable {
-    
+
     int selectedPartIndex;
     Part selectedPart;
-    
+
     @FXML
     private RadioButton inhouseRadioButton;
 
@@ -54,7 +54,7 @@ public class PartModifyController implements Initializable {
 
     @FXML
     private TextField priceTextField;
-    
+
     @FXML
     private Label companyNameLabel;
 
@@ -66,7 +66,7 @@ public class PartModifyController implements Initializable {
 
     @FXML
     private TextField minTextField;
-    
+
     @FXML
     private Label errorLabel;
 
@@ -78,16 +78,11 @@ public class PartModifyController implements Initializable {
 
     @FXML
     void cancelPart(ActionEvent event) {
-        try 
-        {
+        try {
             switchScene(event, "/view/MainView.fxml", "Inventory Management System - Main Menu");
-        }
-        catch(IOException e)
-        {
+        } catch (IOException e) {
             System.out.println(e.getMessage());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -95,8 +90,7 @@ public class PartModifyController implements Initializable {
     @FXML
     void savePart(ActionEvent event) {
         boolean switchScene = false;
-        try
-        {
+        try {
             //Catch any format exception first
             Integer id = selectedPart.getId();
             String name = nameTextField.getText();
@@ -106,55 +100,38 @@ public class PartModifyController implements Initializable {
             Double price = Double.parseDouble(priceTextField.getText());
             //Validate correctly formatted fields
             String errorMessage = validatePartTextFields(price, stock, max, min);
-            if(errorMessage != null && errorMessage.isEmpty() == false)
-            {
+            if (errorMessage != null && errorMessage.isEmpty() == false) {
                 errorLabel.setText(errorMessage);
-            }
-            else
-            {
+            } else {
                 //Determine item type and create that type of item.
-                if(inhouseRadioButton.isSelected())
-                {
+                if (inhouseRadioButton.isSelected()) {
                     int machineId = Integer.parseInt(companyNameTextField.getText());
-                    if(machineId <= 0)
-                    {
+                    if (machineId <= 0) {
                         errorMessage += "\"MachineId\" should be a positive whole number.";
                         errorLabel.setText(errorMessage);
-                    }
-                    else
-                    {
+                    } else {
                         Inventory.updatePart(selectedPartIndex, new InHouse(id, name, price, stock, max, min, machineId));
                         switchScene = true;
                     }
-                }
-                else
-                {
+                } else {
                     String companyName = companyNameTextField.getText();
                     Inventory.updatePart(selectedPartIndex, new Outsourced(id, name, price, stock, min, max, companyName));
                     switchScene = true;
                 }
-                if(switchScene)
-                {
+                if (switchScene) {
                     //Switch scene.
-                    try 
-                    {
+                    try {
                         switchScene(event, "/view/MainView.fxml", "Inventory Management System - Main Menu");
-                    }
-                    catch(IOException e)
-                    {
+                    } catch (IOException e) {
                         System.out.println("controller.PartAddController.savePart() switchScene catch(IOException e)");
                         System.out.println(e.toString());
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         System.out.println("controller.PartAddController.savePart() switchScene catch(Exception e)");
                         System.out.println(e.toString());
                     }
                 }
             }
-        }
-        catch(NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             System.out.println("controller.PartAddController.savePart() outer catch(NumberFormatException e)");
             System.out.println(e.toString());
             String errorMessage = "One or more fields are invalid or empty.";
@@ -175,36 +152,38 @@ public class PartModifyController implements Initializable {
         companyNameTextField.setPromptText("Company Name");
         companyNameTextField.clear();
     }
-    
-    public void switchScene(ActionEvent event, String url, String windowTitle) throws IOException
-    {
+
+    public void switchScene(ActionEvent event, String url, String windowTitle) throws IOException {
         Stage stage;
         Parent root;
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         root = FXMLLoader.load(getClass().getResource(url));
         stage.setScene(new Scene(root));
         stage.setTitle(windowTitle);
         stage.show();
     }
-    
-    public String validatePartTextFields(Double price, Integer stock, Integer max, Integer min)
-    {
+
+    public String validatePartTextFields(Double price, Integer stock, Integer max, Integer min) {
         StringBuilder errorMessageBuilder = new StringBuilder();
-        if (max <= 0)
+        if (max <= 0) {
             errorMessageBuilder.append("\"Max\" must be a positive whole number.\n");
-        if (min < 0)
+        }
+        if (min < 0) {
             errorMessageBuilder.append("\"Min\" must be a positive whole number or zero.\n");
-        if(min > stock)
+        }
+        if (min > stock) {
             errorMessageBuilder.append("\"Stock\" must be greater than or equal to \"Min\".\n");
-        if(max < stock)
+        }
+        if (max < stock) {
             errorMessageBuilder.append("\"Stock\" must be less than or equal to \"Max\".\n");
-        if (price < 0)
+        }
+        if (price < 0) {
             errorMessageBuilder.append("\"Price\" must be greater than or equal to $0.00.\n");
+        }
         return errorMessageBuilder.toString();
     }
-    
-    public void receiveSelectedPart(int partIndex, Part part)
-    {
+
+    public void receiveSelectedPart(int partIndex, Part part) {
         selectedPart = part;
         selectedPartIndex = partIndex;
         idTextField.setText(String.valueOf(part.getId()));
@@ -213,25 +192,22 @@ public class PartModifyController implements Initializable {
         priceTextField.setText(String.valueOf(part.getPrice()));
         minTextField.setText(String.valueOf(part.getMin()));
         maxTextField.setText(String.valueOf(part.getMax()));
-        if (part instanceof InHouse)
-        {
+        if (part instanceof InHouse) {
             inhouseRadioButton.setSelected(true);
             companyNameLabel.setText("Machine ID");
             companyNameTextField.setPromptText("Machine ID");
-            companyNameTextField.setText(String.valueOf(((InHouse)part).getMachineId()));
-        }
-        else
-        {
+            companyNameTextField.setText(String.valueOf(((InHouse) part).getMachineId()));
+        } else {
             outsourcedRadioButton.setSelected(true);
             companyNameLabel.setText("Company Name");
             companyNameTextField.setPromptText("Company Name");
-            companyNameTextField.setText(((Outsourced)part).getCompanyName());
+            companyNameTextField.setText(((Outsourced) part).getCompanyName());
         }
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
 }

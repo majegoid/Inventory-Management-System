@@ -9,27 +9,24 @@ package model;
  *
  * @author Drew
  */
-public class InHouse extends Part
-{
+public class InHouse extends Part {
+
     protected int machineId;
-    
+
     //constructor
-    public InHouse(int id, String name, double price, int stock, int min, int max, int machineId)
-    {
+    public InHouse(int id, String name, double price, int stock, int min, int max, int machineId) {
         super(id, name, price, stock, min, max);
         this.machineId = machineId;
     }
-    
+
     //methods
     //setters (update)
-    public void setMachineId(int machineId)
-    {
+    public void setMachineId(int machineId) {
         this.machineId = machineId;
     }
-    
+
     //getters (read)
-    public int getMachineId()
-    {
+    public int getMachineId() {
         return machineId;
     }
 }
